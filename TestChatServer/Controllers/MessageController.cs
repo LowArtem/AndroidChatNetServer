@@ -67,9 +67,9 @@ namespace TestChatServer.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteMessage(long chatId, long messageId)
+        public async Task<ActionResult> DeleteMessage(long chatId, long messageId, long currentUserId)
         {
-            if (await messageBL.DeleteMessageFromChat(chatId, messageId)) return new OkResult();
+            if (await messageBL.DeleteMessageFromChat(chatId, messageId, currentUserId)) return new OkResult();
             else return new BadRequestResult();
         }
     }

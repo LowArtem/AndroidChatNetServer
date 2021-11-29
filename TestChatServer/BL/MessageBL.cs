@@ -81,13 +81,25 @@ namespace TestChatServer.BL
         }
 
         // false -> error
-        public async Task<bool> DeleteMessageFromChat(long chatId, long messageId)
+        public async Task<bool> DeleteMessageFromChat(long chatId, long messageId, long currentUserId)
         {
             var chat = await chatService.GetChat(chatId);
             if (chat == null) return false;
 
             var message = await messageService.GetMessage(messageId);
             if (message == null || message.Chat.Id != chatId) return false;
+
+            // Deleting messages from dialogs is forbidden (before I make self-messages deleting)
+            if (chat.SecondDialogMemberId != -1) return false;
+
+            // Deleting creator's messages is forbidden (before I make self-messages deleting)
+            if (message.Author.Id == chat.CreatorId || message.Author.Id == chat.SecondDialogMemberId) return false;
+
+            // Admin's message can be deleted only by a creator
+            if (chat.GetListOfAdminIds().Contains(message.Author.Id))
+            {
+                if (chat.CreatorId != currentUserId) return false;
+            }
 
             await messageService.DeleteMessage(messageId);
             return true;
