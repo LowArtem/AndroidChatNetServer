@@ -5,6 +5,7 @@ namespace TestChatServer.DTO
 {
     public class MessageDTO
     {
+        public long Id { get; set; }
         public string Text { get; set; }
         public UserMessageDTO Author { get; set; }
         public DateTime PubDate { get; set; }
@@ -16,6 +17,7 @@ namespace TestChatServer.DTO
         
         public MessageDTO(Message message)
         {
+            this.Id = message.Id;
             this.Text = message.Text;
             this.Author = new UserMessageDTO(message.Author);
             this.PubDate = message.PubDate;
