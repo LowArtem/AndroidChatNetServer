@@ -21,7 +21,6 @@ namespace TestChatServer.Data
 
             string connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-            // Parse connection URL to connection string for Npgsql
             connUrl = connUrl.Replace("postgres://", string.Empty);
 
             string pgHostPortDb = connUrl.Split("@")[1];
