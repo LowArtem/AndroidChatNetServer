@@ -66,7 +66,7 @@ namespace TestChatServer.BL
             var user = await userService.GetUser(chatCreatingDTO.CreatorId);
             if (user == null)
             {
-                logger.LogWarning("CreateChat -> User is null");
+                logger.LogWarning("CreateChat -> User {0} is null", chatCreatingDTO.CreatorId);
                 return -1;
             }
 
