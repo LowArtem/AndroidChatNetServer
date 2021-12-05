@@ -17,7 +17,7 @@ namespace TestChatServer.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=chatappdb;Trusted_Connection=True;");
+            //optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=chat-test-server;Username=postgres;password=postgres");
 
             string connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
