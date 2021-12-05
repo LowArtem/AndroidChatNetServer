@@ -20,7 +20,7 @@ namespace TestChatServer.Data
             string username = System.Environment.GetEnvironmentVariable("USER");
             string password = System.Environment.GetEnvironmentVariable("PASSWORD");
 
-            optionsBuilder.UseSqlServer($"Server=sql303.epizy.com;Database=epiz_30172183_chatdb;user={username};password={password}");
+            optionsBuilder.UseSqlServer($"Server=sql303.epizy.com:3306;Database=epiz_30172183_chatdb;user={username};password={password}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
