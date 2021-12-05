@@ -34,7 +34,7 @@ namespace TestChatServer.Data
             string pgHost = pgHostPort.Split(":")[0];
             string pgPort = pgHostPort.Split(":")[1];
 
-            string connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};Trust Server Certificate=True;";
+            string connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;Trust Server Certificate=True;";
             optionsBuilder.UseNpgsql(connStr);
         }
 
