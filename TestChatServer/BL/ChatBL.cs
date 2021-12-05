@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TestChatServer.Data.Entity;
@@ -11,11 +12,13 @@ namespace TestChatServer.BL
     {
         private readonly ChatService chatService;
         private readonly UserService userService;
+        private readonly ILogger logger;
 
-        public ChatBL(ChatService chatService, UserService userService)
+        public ChatBL(ChatService chatService, UserService userService, ILogger<ChatBL> logger)
         {
             this.chatService = chatService;
             this.userService = userService;
+            this.logger = logger;
         }
 
         public async Task<List<ChatInfoDTO>> GetAllChatInfoByUser(long userId)
@@ -61,14 +64,26 @@ namespace TestChatServer.BL
         public async Task<long> CreateChat(ChatCreatingDTO chatCreatingDTO)
         {
             var user = await userService.GetUser(chatCreatingDTO.CreatorId);
-            if (user == null) return -1;
+            if (user == null)
+            {
+                logger.LogWarning("CreateChat -> User is null");
+                return -1;
+            }
 
             // Dialog - системное название диалоговых чатов, запрещено для ввода как часть названия
             // не забыть сделать фильтр в клиенте
-            if (chatCreatingDTO.Name.ToLower().Contains("dialog")) return -1;
+            if (chatCreatingDTO.Name.ToLower().Contains("dialog"))
+            {
+                logger.LogWarning("CreateChat -> trying to create chat with name dialog");
+                return -1;
+            }
 
             var foundedChat = chatService.GetChatByNameExactly(chatCreatingDTO.Name);
-            if (foundedChat != null) return -1;
+            if (foundedChat != null)
+            {
+                logger.LogWarning("CreateChat -> Chat with this name is already exists");
+                return -1;
+            }
 
             var members = new List<User>();
 
@@ -82,8 +97,9 @@ namespace TestChatServer.BL
                 var savedChat = await chatService.SaveChat(chat);
                 return savedChat.Id;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError("CreateChat -> error: {0}", e.Message);
                 return -1;
             }
         }
