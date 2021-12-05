@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using TestChatServer.Data.Entity;
 
 namespace TestChatServer.Data
@@ -17,10 +18,15 @@ namespace TestChatServer.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=chatappdb;Trusted_Connection=True;");
-            string username = System.Environment.GetEnvironmentVariable("USER");
-            string password = System.Environment.GetEnvironmentVariable("PASSWORD");
 
-            optionsBuilder.UseSqlServer($"Server=sql303.epizy.com:3306;Database=epiz_30172183_chatdb;user={username};password={password}");
+            string pgUserId = Environment.GetEnvironmentVariable("POSTGRES_USER_ID");
+            string pgPassword = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+            string pgHost = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+            string pgPort = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+            string pgDatabase = Environment.GetEnvironmentVariable("POSTGRES_DB");
+
+            string connStr = $"Server={pgHost};Port={pgPort};User Id={pgUserId};Password={pgPassword};Database={pgDatabase}";
+            optionsBuilder.UseNpgsql(connStr);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
