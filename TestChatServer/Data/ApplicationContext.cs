@@ -16,7 +16,11 @@ namespace TestChatServer.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=chatappdb;Trusted_Connection=True;");
+            //optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=chatappdb;Trusted_Connection=True;");
+            string username = System.Environment.GetEnvironmentVariable("USER");
+            string password = System.Environment.GetEnvironmentVariable("PASSWORD");
+
+            optionsBuilder.UseSqlServer($"Server=sql303.epizy.com;Database=epiz_30172183_chatdb;user={username};password={password}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
