@@ -68,15 +68,7 @@ namespace TestChatServer.BL
             {
                 logger.LogWarning("CreateChat -> User {0} is null", chatCreatingDTO.CreatorId);
                 return -1;
-            }
-
-            // Dialog - системное название диалоговых чатов, запрещено для ввода как часть названия
-            // не забыть сделать фильтр в клиенте
-            if (chatCreatingDTO.Name.ToLower().Contains("dialog"))
-            {
-                logger.LogWarning("CreateChat -> trying to create chat with name dialog");
-                return -1;
-            }
+            }            
 
             var foundedChat = chatService.GetChatByNameExactly(chatCreatingDTO.Name);
             if (foundedChat != null)
