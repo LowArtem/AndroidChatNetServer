@@ -17,6 +17,8 @@ namespace TestChatServer.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             //optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=chat-test-server;Username=postgres;password=postgres");
 
             string connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
