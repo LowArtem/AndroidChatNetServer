@@ -57,7 +57,7 @@ namespace TestChatServer.Services
             }
             catch (Exception e)
             {
-                logger.LogWarning("UpdateUser -> error: {0}", e.Message);
+                logger.LogWarning("UpdateUser -> error: {0}", e.ToString());
                 return false;
             }
         }
