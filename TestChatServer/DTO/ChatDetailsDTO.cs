@@ -24,7 +24,6 @@ namespace TestChatServer.DTO
             this.CreatorId = chat.CreatorId;
             this.SecondDialogMemberId = chat.SecondDialogMemberId;
 
-            // TODO: не работает, пофиксить secondIcon
             if (chat.SecondDialogMemberId != -1)
             {
                 var secondMember = userService.GetUser(chat.SecondDialogMemberId).Result;
@@ -35,6 +34,12 @@ namespace TestChatServer.DTO
                 else
                 {
                     this.SecondIcon = secondMember.Icon;
+                }
+
+                var firstMember = userService.GetUser(chat.CreatorId).Result;
+                if (firstMember != null)
+                {
+                    this.Icon = firstMember.Icon;
                 }
             }
             else
