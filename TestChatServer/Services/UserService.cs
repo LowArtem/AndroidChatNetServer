@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace TestChatServer.Services
 
 
         private readonly IRepository<User> _userRepo;
+        private readonly ILogger logger;
 
-        public UserService(IRepository<User> userRepo)
+        public UserService(IRepository<User> userRepo, ILogger<UserService> logger)
         {
             _userRepo = userRepo;
+            this.logger = logger;
         }
 
         public async Task<User> SaveUser(User user)
@@ -37,7 +40,11 @@ namespace TestChatServer.Services
             try
             {
                 var oldUser = await _userRepo.GetAsync(id);
-                if (oldUser == null) return false;
+                if (oldUser == null)
+                {
+                    logger.LogWarning("UpdateUser -> cannot get user {0}. It is null", id);
+                    return false;
+                }
 
                 oldUser.Username = newUser.Username;
                 oldUser.Password = newUser.Password;
@@ -48,8 +55,9 @@ namespace TestChatServer.Services
                 await _userRepo.UpdateAsync(oldUser);
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogWarning("UpdateUser -> error: {0}", e.Message);
                 return false;
             }
         }
