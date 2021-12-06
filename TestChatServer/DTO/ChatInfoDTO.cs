@@ -30,6 +30,12 @@ namespace TestChatServer.DTO
                 {
                     this.SecondIcon = secondMember.Icon;
                 }
+
+                var firstMember = userService.GetUser(chat.CreatorId).Result;
+                if (firstMember != null)
+                {
+                    this.Icon = firstMember.Icon;
+                }
             }
             else
             {
