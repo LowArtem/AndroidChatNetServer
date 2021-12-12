@@ -71,12 +71,17 @@ namespace TestChatServer.BL
             {
                 var messages = messageService.GetNMessagesByIndexInChat(chatId, totalMessagesCount - startIndex, startIndex);
 
-                return ConvertListToDTO(messages);
+                var list = ConvertListToDTO(messages);
+                list.Reverse();
+                return list;
             }
             else
             {
                 var messages = messageService.GetNMessagesByIndexInChat(chatId, messagesCount, startIndex);
-                return ConvertListToDTO(messages);
+
+                var list = ConvertListToDTO(messages);
+                list.Reverse();
+                return list;
             }
         }
 
