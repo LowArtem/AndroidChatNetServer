@@ -136,10 +136,18 @@ namespace TestChatServer.BL
             try
             {
                 var foundedChat = await chatService.GetChat(id);
-                if (foundedChat == null) return false;
+                if (foundedChat == null)
+                {
+                    logger.LogWarning($"Update chat -> chat id{id} is null");
+                    return false;
+                }
 
                 var nameTestChat = chatService.GetChatByNameExactly(chatUpdatingDTO.Name);
-                if (nameTestChat.Id != chatUpdatingDTO.ChatId) return false;
+                if (nameTestChat.Id != chatUpdatingDTO.ChatId)
+                {
+                    logger.LogWarning($"Names are equal:\nid{nameTestChat.Id} - {nameTestChat.Name}\nid{id} - {chatUpdatingDTO.Name}");
+                    return false;
+                }
 
                 foundedChat.Name = chatUpdatingDTO.Name;
                 foundedChat.About = chatUpdatingDTO.About;
@@ -148,8 +156,9 @@ namespace TestChatServer.BL
 
                 return await chatService.UpdateChat(id, foundedChat);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e, $"Update chat error -> {e.Message}");
                 return false;
             }
         }
