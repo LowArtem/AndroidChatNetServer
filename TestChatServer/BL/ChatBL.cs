@@ -143,7 +143,7 @@ namespace TestChatServer.BL
                 }
 
                 var nameTestChat = chatService.GetChatByNameExactly(chatUpdatingDTO.Name);
-                if (nameTestChat.Id != chatUpdatingDTO.ChatId)
+                if (nameTestChat.Id != id)
                 {
                     logger.LogWarning($"Names are equal:\nid{nameTestChat.Id} - {nameTestChat.Name}\nid{id} - {chatUpdatingDTO.Name}");
                     return false;
