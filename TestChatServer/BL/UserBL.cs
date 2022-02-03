@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,10 +13,12 @@ namespace TestChatServer.BL
     public class UserBL
     {
         private readonly UserService userService;
+        private readonly ILogger logger;
 
-        public UserBL(UserService userService)
+        public UserBL(UserService userService, ILogger<UserBL> logger)
         {
             this.userService = userService;
+            this.logger = logger;
         }
 
         public async Task<User> Save(User user)
@@ -31,7 +34,14 @@ namespace TestChatServer.BL
         }
 
         public async Task<bool> Update(long id, User user)
-        {            
+        {
+            var nameTestUser = userService.GetUserByUsername(user.Username);
+            if (nameTestUser.Id != id)
+            {
+                logger.LogWarning($"Names are equal:\nid{nameTestUser.Id} - {nameTestUser.Username}\nid{id} - {user.Username}");
+                return false;
+            }
+
             return await userService.UpdateUser(id, user);
         }
 
